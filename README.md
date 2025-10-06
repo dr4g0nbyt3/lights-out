@@ -22,13 +22,58 @@ Transform Rocket League into a spooky Halloween experience with dramatically red
 
 ### Requirements
 - Rocket League (Steam version recommended)
-- BakkesMod (optional, for easier mod management)
+- Windows OS (for automated scripts)
+- BakkesMod (optional, for command-based installation)
 
-### Manual Installation
+### Method 1: Automated Installation (Recommended)
+
+**Quick Install:**
+1. Double-click `install_lightsout.bat`
+2. The script will automatically:
+   - Locate your Rocket League directory
+   - Create backups of any existing files
+   - Install the mod files
+3. Restart Rocket League
+
+**Quick Uninstall:**
+1. Double-click `uninstall_lightsout.bat`
+2. The script will remove all mod files
+3. Restart Rocket League
+
+**Features:**
+- ✅ Automatic file location detection
+- ✅ Timestamped backups
+- ✅ Error handling and validation
+- ✅ Safe uninstallation
+
+### Method 2: BakkesMod Commands
+
+**Setup:**
+1. Install [BakkesMod](https://bakkesmod.com/)
+2. Copy `lightsout.cfg` to: `%APPDATA%\bakkesmod\bakkesmod\cfg\`
+3. Copy the `.bat` scripts to the same folder as the mod files
+
+**Usage:**
+1. In Rocket League, press `F6` to open the BakkesMod console
+2. Type: `exec lightsout.cfg` to load the commands
+3. Available commands:
+   - `lightsout_install` - Install the mod
+   - `lightsout_uninstall` - Uninstall the mod
+   - `lightsout_info` - Show mod information
+   - `lightsout_help` - Show all commands
+
+**Optional Key Binds:**
+Edit `lightsout.cfg` and uncomment these lines to add key binds:
+```
+bind F9 "lightsout_install"
+bind F10 "lightsout_uninstall"
+```
+
+### Method 3: Manual Installation
 
 1. **Locate your Rocket League directory:**
    ```
-   Documents\My Games\Rocket League\TAGame\CookedPCConsole
+   %USERPROFILE%\Documents\My Games\Rocket League\TAGame\CookedPCConsole
    ```
 
 2. **Backup original files** (recommended):
@@ -40,11 +85,7 @@ Transform Rocket League into a spooky Halloween experience with dramatically red
 
 4. **Launch Rocket League** and enjoy the spooky atmosphere!
 
-### BakkesMod Installation (Alternative)
-
-1. Install [BakkesMod](https://bakkesmod.com/)
-2. Place mod files in: `%APPDATA%\bakkesmod\bakkesmod\data\`
-3. Load the mod through BakkesMod's plugin menu
+**Note:** Manual installation requires copying files back and forth to enable/disable the mod.
 
 ## Technical Details
 

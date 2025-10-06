@@ -26,13 +26,21 @@ if exist "%STEAM_DIR%\steamapps\libraryfolders.vdf" (
     call :search_steam_libraries "%STEAM_DIR%\steamapps\libraryfolders.vdf"
 )
 
-REM Check alternative Steam locations
-for %%D in (C D E F G) do (
+REM Check Program Files (x64)
+if exist "C:\Program Files\Steam\steamapps\libraryfolders.vdf" (
+    call :search_steam_libraries "C:\Program Files\Steam\steamapps\libraryfolders.vdf"
+)
+
+REM Check alternative Steam locations on all drives
+for %%D in (C D E F G H I J K L M N O P Q R S T U V W X Y Z) do (
     if exist "%%D:\Steam\steamapps\libraryfolders.vdf" (
         call :search_steam_libraries "%%D:\Steam\steamapps\libraryfolders.vdf"
     )
     if exist "%%D:\SteamLibrary\steamapps\libraryfolders.vdf" (
         call :search_steam_libraries "%%D:\SteamLibrary\steamapps\libraryfolders.vdf"
+    )
+    if exist "%%D:\Games\Steam\steamapps\libraryfolders.vdf" (
+        call :search_steam_libraries "%%D:\Games\Steam\steamapps\libraryfolders.vdf"
     )
 )
 
@@ -117,13 +125,17 @@ exit /b 0
 
 :search_steam_libraries
 REM This subroutine searches for Rocket League in Steam library folders
-setlocal
+setlocal enabledelayedexpansion
 set "VDF_FILE=%~1"
 
 REM Parse libraryfolders.vdf to find all library paths
-for /f "usebackq tokens=2 delims=	 " %%P in (`findstr /C:"path" "%VDF_FILE%"`) do (
+REM The path value is in the format: "path"		"C:\\Path\\To\\Steam"
+for /f "usebackq tokens=2* delims=	 " %%P in (`findstr /C:"path" "%VDF_FILE%"`) do (
     set "LIBRARY_PATH=%%~P"
-    setlocal enabledelayedexpansion
+
+    REM Remove quotes and handle escaped backslashes
+    set "LIBRARY_PATH=!LIBRARY_PATH:"=!"
+    set "LIBRARY_PATH=!LIBRARY_PATH:\\=\!"
 
     REM Check if Rocket League is installed in this library
     set "RL_STEAM_PATH=!LIBRARY_PATH!\steamapps\common\rocketleague"
@@ -132,12 +144,10 @@ for /f "usebackq tokens=2 delims=	 " %%P in (`findstr /C:"path" "%VDF_FILE%"`) d
         set "RL_CONFIG_DIR=%USERPROFILE%\Documents\My Games\Rocket League\TAGame\CookedPCConsole"
         if exist "!RL_CONFIG_DIR!" (
             endlocal
-            endlocal
             set "RL_DIR=!RL_CONFIG_DIR!"
             goto :eof
         )
     )
-    endlocal
 )
 endlocal
 goto :eof

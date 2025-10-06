@@ -1,0 +1,159 @@
+// Lights Out - Halloween Mod for Rocket League
+// UDK Package Configuration
+// This file contains the lighting configuration for the Lights Out mod
+
+[LightsOutMod]
+ModName=Lights Out
+ModVersion=1.0.0
+Author=Halloween Mod Team
+Description=Atmospheric Halloween mod with reduced arena lighting
+TargetGame=Rocket League
+
+// ============================================================================
+// ARENA LIGHTING CONFIGURATION
+// ============================================================================
+
+[ArenaLighting]
+// Main stadium floodlights - reduced to 10-20% of original intensity
+DirectionalLight_Main_Brightness=0.15
+DirectionalLight_Main_ShadowColor=(R=50,G=50,B=50)
+DirectionalLight_Main_LightColor=(R=255,G=240,B=220)
+
+// Secondary directional light (upward-facing) - minimal
+DirectionalLight_Secondary_Brightness=0.08
+DirectionalLight_Secondary_ShadowColor=(R=40,G=40,B=40)
+DirectionalLight_Secondary_LightColor=(R=200,G=200,B=200)
+
+// Ambient lighting - minimal for basic visibility
+AmbientLight_Intensity=0.05
+AmbientLight_Color=(R=30,G=30,B=40)
+
+// Crowd area lighting - heavily dimmed
+CrowdArea_LightIntensity=0.02
+CrowdArea_Enabled=True
+
+// Ceiling/roof lighting - heavily reduced
+CeilingLight_Intensity=0.05
+CeilingLight_Enabled=True
+
+// Skybox - darkened but visible
+Skybox_Brightness=0.15
+Skybox_ColorMultiplier=0.3
+
+// ============================================================================
+// PRESERVED LIGHTING ELEMENTS
+// ============================================================================
+
+[GoalLighting]
+// Goal post lighting - preserved for orientation
+GoalPost_Intensity=1.0
+GoalPost_Color=(R=255,G=200,B=0)
+GoalPost_Enabled=True
+GoalArea_AmbientMultiplier=0.5
+
+[FieldBoundaries]
+// Minimal field boundary visibility
+FieldLine_Visibility=0.3
+FieldWall_AmbientLight=0.1
+
+// ============================================================================
+// CAR LIGHTING - FULLY PRESERVED
+// ============================================================================
+
+[CarHeadlights]
+// Headlight settings - MUST REMAIN AT 100% INTENSITY
+Headlight_Brightness=1.0
+Headlight_Range=3000.0
+Headlight_ConeAngle=45.0
+Headlight_ColorTemperature=5500
+Headlight_CastShadows=True
+Headlight_ShadowQuality=High
+Headlight_Enabled=True
+
+// Car underglow and LED strips
+CarUnderglow_Enabled=True
+CarUnderglow_Brightness=1.0
+CarLED_Enabled=True
+CarLED_Brightness=1.0
+
+// Emergency/brake lighting
+BrakeLight_Enabled=True
+BrakeLight_Brightness=1.0
+
+// ============================================================================
+// BOOST SYSTEM LIGHTING - FULLY PRESERVED
+// ============================================================================
+
+[BoostLighting]
+// Boost trail particles and glow
+BoostTrail_ParticleBrightness=1.0
+BoostTrail_GlowIntensity=1.0
+BoostTrail_LightRadius=800.0
+BoostTrail_PreserveColors=True
+BoostTrail_Enabled=True
+
+// Boost pickup pad illumination
+BoostPad_GlowIntensity=1.0
+BoostPad_LightRadius=500.0
+BoostPad_PulseEnabled=True
+BoostPad_Enabled=True
+
+// Boost flame/particle lighting on car
+BoostFlame_Brightness=1.0
+BoostFlame_LightRadius=600.0
+BoostFlame_DynamicShadows=True
+BoostFlame_Enabled=True
+
+// Full boost effect (supersonic)
+SupersonicEffect_Brightness=1.0
+SupersonicEffect_TrailIntensity=1.0
+SupersonicEffect_Enabled=True
+
+// ============================================================================
+// VISUAL EFFECTS CONFIGURATION
+// ============================================================================
+
+[AtmosphericEffects]
+// Enhanced shadow contrast for spooky atmosphere
+ShadowContrast=1.8
+ShadowDarkness=0.9
+ShadowQuality=High
+
+// Fog/atmosphere settings for Halloween ambiance
+VolumetricFog_Enabled=True
+VolumetricFog_Density=0.15
+VolumetricFog_Color=(R=40,G=35,B=50)
+VolumetricFog_StartDistance=1000.0
+
+// ============================================================================
+// GAMEPLAY VISIBILITY SAFEGUARDS
+// ============================================================================
+
+[GameplayVisibility]
+// Ball visibility - must remain clear
+Ball_AmbientLight=0.4
+Ball_SelfIllumination=0.2
+Ball_OutlineEnabled=False
+
+// Player nameplates
+Nameplate_Visibility=1.0
+Nameplate_BackgroundOpacity=0.8
+
+// Performance settings
+DynamicShadows_Enabled=True
+LightmapQuality=Production
+RealTimeLighting_Enabled=True
+
+// ============================================================================
+// COMPATIBILITY SETTINGS
+// ============================================================================
+
+[Compatibility]
+// Ensure compatibility with other mods
+AllowOtherVisualMods=True
+PreserveCarCustomization=True
+PreserveBoostCustomization=True
+
+// Performance optimization
+OptimizeLightmaps=True
+ReduceUnnecessaryLights=True

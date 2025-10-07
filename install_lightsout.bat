@@ -164,8 +164,17 @@ for /f "usebackq tokens=2* delims=	 " %%P in (`findstr /C:"path" "%VDF_FILE%"`) 
     REM Check if Rocket League is installed in this library
     set "RL_STEAM_PATH=!LIBRARY_PATH!\steamapps\common\rocketleague"
     if exist "!RL_STEAM_PATH!" (
-        REM Found the game, now check for the config directory
+        REM Found the game installation, now check for config directories
+        REM First check the standard Documents location
         set "RL_CONFIG_DIR=%USERPROFILE%\Documents\My Games\Rocket League\TAGame\CookedPCConsole"
+        if exist "!RL_CONFIG_DIR!" (
+            endlocal
+            set "RL_DIR=!RL_CONFIG_DIR!"
+            goto :eof
+        )
+
+        REM If not found, check inside the game installation directory
+        set "RL_CONFIG_DIR=!RL_STEAM_PATH!\TAGame\CookedPCConsole"
         if exist "!RL_CONFIG_DIR!" (
             endlocal
             set "RL_DIR=!RL_CONFIG_DIR!"

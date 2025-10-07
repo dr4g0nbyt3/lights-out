@@ -18,9 +18,8 @@ if(NOT EXISTS ${BAKKESMOD_SDK_DIR})
     message(FATAL_ERROR "BakkesMod SDK not found. Please set BAKKESMOD_SDK_DIR to the SDK path.")
 endif()
 
-# Include BakkesMod SDK
+# Include BakkesMod SDK headers
 include_directories(${BAKKESMOD_SDK_DIR}/include)
-link_directories(${BAKKESMOD_SDK_DIR}/lib)
 
 # Create the plugin DLL
 add_library(LightsOut SHARED
@@ -28,10 +27,8 @@ add_library(LightsOut SHARED
     LightsOutPlugin.h
 )
 
-# Link against BakkesMod
-target_link_libraries(LightsOut PRIVATE
-    bakkesmod
-)
+# BakkesMod plugins are header-only - no linking needed
+# The plugin interfaces with BakkesMod through the plugin manager at runtime
 
 # Set compile options
 if(MSVC)

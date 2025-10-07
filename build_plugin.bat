@@ -7,17 +7,61 @@ echo   Lights Out Plugin - Build Script
 echo ========================================
 echo.
 
-REM Check if Visual Studio is installed
+REM Check if Visual Studio is already in PATH
 where cl.exe >nul 2>&1
 if %ERRORLEVEL% NEQ 0 (
-    echo ERROR: Visual Studio C++ compiler not found!
+    echo Visual Studio C++ compiler not in PATH, searching for it...
     echo.
-    echo Please install Visual Studio 2019 or later with C++ support.
-    echo Make sure to run this from a "Developer Command Prompt for VS"
-    echo or run vcvarsall.bat first.
+
+    REM Try to find and load Visual Studio environment
+    set "VS_FOUND=0"
+
+    REM Check for VS 2022
+    if exist "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat" (
+        echo Found Visual Studio 2022 Community
+        call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat" x64
+        set "VS_FOUND=1"
+    ) else if exist "C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Auxiliary\Build\vcvarsall.bat" (
+        echo Found Visual Studio 2022 Professional
+        call "C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Auxiliary\Build\vcvarsall.bat" x64
+        set "VS_FOUND=1"
+    ) else if exist "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" (
+        echo Found Visual Studio 2022 Enterprise
+        call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
+        set "VS_FOUND=1"
+    )
+
+    REM Check for VS 2019
+    if "%VS_FOUND%"=="0" (
+        if exist "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" (
+            echo Found Visual Studio 2019 Community
+            call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" x64
+            set "VS_FOUND=1"
+        ) else if exist "C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\VC\Auxiliary\Build\vcvarsall.bat" (
+            echo Found Visual Studio 2019 Professional
+            call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\VC\Auxiliary\Build\vcvarsall.bat" x64
+            set "VS_FOUND=1"
+        ) else if exist "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" (
+            echo Found Visual Studio 2019 Enterprise
+            call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
+            set "VS_FOUND=1"
+        )
+    )
+
+    if "%VS_FOUND%"=="0" (
+        echo ERROR: Visual Studio not found!
+        echo.
+        echo Please install Visual Studio 2019 or later with C++ support.
+        echo Download from: https://visualstudio.microsoft.com/downloads/
+        echo.
+        echo Make sure to install "Desktop development with C++"
+        echo.
+        pause
+        exit /b 1
+    )
+
+    echo Visual Studio environment loaded successfully!
     echo.
-    pause
-    exit /b 1
 )
 
 REM Check if CMake is installed

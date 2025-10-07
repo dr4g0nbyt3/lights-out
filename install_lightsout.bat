@@ -33,15 +33,37 @@ if exist "C:\Program Files\Steam\steamapps\libraryfolders.vdf" (
 )
 
 REM Check alternative Steam locations on all drives
+REM Note: libraryfolders.vdf can be in steamapps OR in the steam root directory
 for %%D in (C D E F G H I J K L M N O P Q R S T U V W X Y Z) do (
     if exist "%%D:\Steam\steamapps\libraryfolders.vdf" (
         call :search_steam_libraries "%%D:\Steam\steamapps\libraryfolders.vdf"
     )
+    if exist "%%D:\Steam\libraryfolders.vdf" (
+        call :search_steam_libraries "%%D:\Steam\libraryfolders.vdf"
+    )
     if exist "%%D:\SteamLibrary\steamapps\libraryfolders.vdf" (
         call :search_steam_libraries "%%D:\SteamLibrary\steamapps\libraryfolders.vdf"
     )
+    if exist "%%D:\SteamLibrary\libraryfolders.vdf" (
+        call :search_steam_libraries "%%D:\SteamLibrary\libraryfolders.vdf"
+    )
     if exist "%%D:\Games\Steam\steamapps\libraryfolders.vdf" (
         call :search_steam_libraries "%%D:\Games\Steam\steamapps\libraryfolders.vdf"
+    )
+    if exist "%%D:\Games\Steam\libraryfolders.vdf" (
+        call :search_steam_libraries "%%D:\Games\Steam\libraryfolders.vdf"
+    )
+)
+
+REM Check for nested custom paths like D:\data\gaming\pc\steam
+for %%D in (C D E F G H I J K L M N O P Q R S T U V W X Y Z) do (
+    for %%P in (data\gaming\pc\steam games\steam program_files\steam) do (
+        if exist "%%D:\%%P\libraryfolders.vdf" (
+            call :search_steam_libraries "%%D:\%%P\libraryfolders.vdf"
+        )
+        if exist "%%D:\%%P\steamapps\libraryfolders.vdf" (
+            call :search_steam_libraries "%%D:\%%P\steamapps\libraryfolders.vdf"
+        )
     )
 )
 

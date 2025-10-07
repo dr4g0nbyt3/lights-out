@@ -151,6 +151,28 @@ for %%D in (C D E F G H I J K L M N O P Q R S T U V W X Y Z) do (
     )
 )
 
+REM Fallback: Direct search for Rocket League installation
+if not defined RL_DIR (
+    echo DEBUG: VDF parsing didn't find RL, trying direct search...
+    for %%D in (C D E F G H I J K L M N O P Q R S T U V W X Y Z) do (
+        if exist "%%D:\data\gaming\pc\steam\steamapps\common\rocketleague\TAGame\CookedPCConsole" (
+            echo DEBUG: Found RL directly at %%D:\data\gaming\pc\steam\steamapps\common\rocketleague
+            set "RL_DIR=%%D:\data\gaming\pc\steam\steamapps\common\rocketleague\TAGame\CookedPCConsole"
+            goto :found_rl_dir
+        )
+        if exist "%%D:\Steam\steamapps\common\rocketleague\TAGame\CookedPCConsole" (
+            echo DEBUG: Found RL directly at %%D:\Steam\steamapps\common\rocketleague
+            set "RL_DIR=%%D:\Steam\steamapps\common\rocketleague\TAGame\CookedPCConsole"
+            goto :found_rl_dir
+        )
+        if exist "%%D:\SteamLibrary\steamapps\common\rocketleague\TAGame\CookedPCConsole" (
+            echo DEBUG: Found RL directly at %%D:\SteamLibrary\steamapps\common\rocketleague
+            set "RL_DIR=%%D:\SteamLibrary\steamapps\common\rocketleague\TAGame\CookedPCConsole"
+            goto :found_rl_dir
+        )
+    )
+)
+
 if not defined RL_DIR (
     echo ERROR: Rocket League directory not found!
     echo Expected default location: %DEFAULT_RL_DIR%

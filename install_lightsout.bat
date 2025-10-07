@@ -20,6 +20,7 @@ if exist "%DEFAULT_RL_DIR%" (
 
 REM Search for Steam library folders
 echo Searching for Rocket League in Steam library folders...
+echo.
 
 REM Check default Steam location
 set "STEAM_DIR=C:\Program Files (x86)\Steam"
@@ -59,9 +60,11 @@ REM Check for nested custom paths like D:\data\gaming\pc\steam
 for %%D in (C D E F G H I J K L M N O P Q R S T U V W X Y Z) do (
     for %%P in (data\gaming\pc\steam games\steam program_files\steam) do (
         if exist "%%D:\%%P\libraryfolders.vdf" (
+            echo Found VDF: %%D:\%%P\libraryfolders.vdf
             call :search_steam_libraries "%%D:\%%P\libraryfolders.vdf"
         )
         if exist "%%D:\%%P\steamapps\libraryfolders.vdf" (
+            echo Found VDF: %%D:\%%P\steamapps\libraryfolders.vdf
             call :search_steam_libraries "%%D:\%%P\steamapps\libraryfolders.vdf"
         )
     )
@@ -152,6 +155,8 @@ REM This subroutine searches for Rocket League in Steam library folders
 setlocal enabledelayedexpansion
 set "VDF_FILE=%~1"
 
+echo Parsing VDF: %VDF_FILE%
+
 REM Parse libraryfolders.vdf to find all library paths
 REM The path value is in the format: "path"		"C:\\Path\\To\\Steam"
 for /f "usebackq tokens=2* delims=	 " %%P in (`findstr /C:"path" "%VDF_FILE%"`) do (
@@ -161,13 +166,18 @@ for /f "usebackq tokens=2* delims=	 " %%P in (`findstr /C:"path" "%VDF_FILE%"`) 
     set "LIBRARY_PATH=!LIBRARY_PATH:"=!"
     set "LIBRARY_PATH=!LIBRARY_PATH:\\=\!"
 
+    echo Checking library path: !LIBRARY_PATH!
+
     REM Check if Rocket League is installed in this library
     set "RL_STEAM_PATH=!LIBRARY_PATH!\steamapps\common\rocketleague"
     if exist "!RL_STEAM_PATH!" (
+        echo Found Rocket League at: !RL_STEAM_PATH!
         REM Found the game installation, now check for config directories
         REM First check the standard Documents location
         set "RL_CONFIG_DIR=%USERPROFILE%\Documents\My Games\Rocket League\TAGame\CookedPCConsole"
+        echo Checking: !RL_CONFIG_DIR!
         if exist "!RL_CONFIG_DIR!" (
+            echo SUCCESS: Found config at !RL_CONFIG_DIR!
             endlocal
             set "RL_DIR=!RL_CONFIG_DIR!"
             goto :eof
@@ -175,10 +185,14 @@ for /f "usebackq tokens=2* delims=	 " %%P in (`findstr /C:"path" "%VDF_FILE%"`) 
 
         REM If not found, check inside the game installation directory
         set "RL_CONFIG_DIR=!RL_STEAM_PATH!\TAGame\CookedPCConsole"
+        echo Checking: !RL_CONFIG_DIR!
         if exist "!RL_CONFIG_DIR!" (
+            echo SUCCESS: Found config at !RL_CONFIG_DIR!
             endlocal
             set "RL_DIR=!RL_CONFIG_DIR!"
             goto :eof
+        ) else (
+            echo NOT FOUND: !RL_CONFIG_DIR!
         )
     )
 )

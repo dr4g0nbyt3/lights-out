@@ -1,0 +1,5 @@
+LIBRARY "LightsOut"
+EXPORTS
+    GetPluginName
+    GetPluginVersion
+    GetPluginType

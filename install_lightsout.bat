@@ -56,17 +56,36 @@ for %%D in (C D E F G H I J K L M N O P Q R S T U V W X Y Z) do (
     )
 )
 
-REM Check for nested custom paths like D:\data\gaming\pc\steam
+REM Check for common nested custom paths
 for %%D in (C D E F G H I J K L M N O P Q R S T U V W X Y Z) do (
-    for %%P in (data\gaming\pc\steam games\steam program_files\steam) do (
-        if exist "%%D:\%%P\libraryfolders.vdf" (
-            echo Found VDF: %%D:\%%P\libraryfolders.vdf
-            call :search_steam_libraries "%%D:\%%P\libraryfolders.vdf"
-        )
-        if exist "%%D:\%%P\steamapps\libraryfolders.vdf" (
-            echo Found VDF: %%D:\%%P\steamapps\libraryfolders.vdf
-            call :search_steam_libraries "%%D:\%%P\steamapps\libraryfolders.vdf"
-        )
+    REM Check data\gaming\pc\steam pattern
+    if exist "%%D:\data\gaming\pc\steam\libraryfolders.vdf" (
+        echo Found VDF: %%D:\data\gaming\pc\steam\libraryfolders.vdf
+        call :search_steam_libraries "%%D:\data\gaming\pc\steam\libraryfolders.vdf"
+    )
+    if exist "%%D:\data\gaming\pc\steam\steamapps\libraryfolders.vdf" (
+        echo Found VDF: %%D:\data\gaming\pc\steam\steamapps\libraryfolders.vdf
+        call :search_steam_libraries "%%D:\data\gaming\pc\steam\steamapps\libraryfolders.vdf"
+    )
+
+    REM Check games\steam pattern
+    if exist "%%D:\games\steam\libraryfolders.vdf" (
+        echo Found VDF: %%D:\games\steam\libraryfolders.vdf
+        call :search_steam_libraries "%%D:\games\steam\libraryfolders.vdf"
+    )
+    if exist "%%D:\games\steam\steamapps\libraryfolders.vdf" (
+        echo Found VDF: %%D:\games\steam\steamapps\libraryfolders.vdf
+        call :search_steam_libraries "%%D:\games\steam\steamapps\libraryfolders.vdf"
+    )
+
+    REM Check program files\steam pattern
+    if exist "%%D:\program files\steam\libraryfolders.vdf" (
+        echo Found VDF: %%D:\program files\steam\libraryfolders.vdf
+        call :search_steam_libraries "%%D:\program files\steam\libraryfolders.vdf"
+    )
+    if exist "%%D:\program files\steam\steamapps\libraryfolders.vdf" (
+        echo Found VDF: %%D:\program files\steam\steamapps\libraryfolders.vdf
+        call :search_steam_libraries "%%D:\program files\steam\steamapps\libraryfolders.vdf"
     )
 )
 

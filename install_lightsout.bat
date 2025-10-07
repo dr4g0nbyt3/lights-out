@@ -21,47 +21,64 @@ if exist "%DEFAULT_RL_DIR%" (
 REM Search for Steam library folders
 echo Searching for Rocket League in Steam library folders...
 echo.
+echo DEBUG: Starting Steam library search...
 
 REM Check default Steam location
+echo DEBUG: Checking default Steam locations...
 set "STEAM_DIR=C:\Program Files (x86)\Steam"
+echo DEBUG: Checking %STEAM_DIR%\steamapps\libraryfolders.vdf
 if exist "%STEAM_DIR%\steamapps\libraryfolders.vdf" (
+    echo DEBUG: Found! Calling search function...
     call :search_steam_libraries "%STEAM_DIR%\steamapps\libraryfolders.vdf"
 )
 
 REM Check Program Files (x64)
+echo DEBUG: Checking C:\Program Files\Steam\steamapps\libraryfolders.vdf
 if exist "C:\Program Files\Steam\steamapps\libraryfolders.vdf" (
+    echo DEBUG: Found! Calling search function...
     call :search_steam_libraries "C:\Program Files\Steam\steamapps\libraryfolders.vdf"
 )
 
 REM Check alternative Steam locations on all drives
+echo DEBUG: Checking alternative Steam locations on all drives...
 REM Note: libraryfolders.vdf can be in steamapps OR in the steam root directory
 for %%D in (C D E F G H I J K L M N O P Q R S T U V W X Y Z) do (
     if exist "%%D:\Steam\steamapps\libraryfolders.vdf" (
+        echo DEBUG: Found %%D:\Steam\steamapps\libraryfolders.vdf
         call :search_steam_libraries "%%D:\Steam\steamapps\libraryfolders.vdf"
     )
     if exist "%%D:\Steam\libraryfolders.vdf" (
+        echo DEBUG: Found %%D:\Steam\libraryfolders.vdf
         call :search_steam_libraries "%%D:\Steam\libraryfolders.vdf"
     )
     if exist "%%D:\SteamLibrary\steamapps\libraryfolders.vdf" (
+        echo DEBUG: Found %%D:\SteamLibrary\steamapps\libraryfolders.vdf
         call :search_steam_libraries "%%D:\SteamLibrary\steamapps\libraryfolders.vdf"
     )
     if exist "%%D:\SteamLibrary\libraryfolders.vdf" (
+        echo DEBUG: Found %%D:\SteamLibrary\libraryfolders.vdf
         call :search_steam_libraries "%%D:\SteamLibrary\libraryfolders.vdf"
     )
     if exist "%%D:\Games\Steam\steamapps\libraryfolders.vdf" (
+        echo DEBUG: Found %%D:\Games\Steam\steamapps\libraryfolders.vdf
         call :search_steam_libraries "%%D:\Games\Steam\steamapps\libraryfolders.vdf"
     )
     if exist "%%D:\Games\Steam\libraryfolders.vdf" (
+        echo DEBUG: Found %%D:\Games\Steam\libraryfolders.vdf
         call :search_steam_libraries "%%D:\Games\Steam\libraryfolders.vdf"
     )
 )
 
 REM Check for common nested custom paths
+echo Checking nested custom paths...
 for %%D in (C D E F G H I J K L M N O P Q R S T U V W X Y Z) do (
     REM Check data\gaming\pc\steam pattern
+    echo Checking: %%D:\data\gaming\pc\steam\libraryfolders.vdf
     if exist "%%D:\data\gaming\pc\steam\libraryfolders.vdf" (
         echo Found VDF: %%D:\data\gaming\pc\steam\libraryfolders.vdf
         call :search_steam_libraries "%%D:\data\gaming\pc\steam\libraryfolders.vdf"
+    ) else (
+        echo Not found: %%D:\data\gaming\pc\steam\libraryfolders.vdf
     )
     if exist "%%D:\data\gaming\pc\steam\steamapps\libraryfolders.vdf" (
         echo Found VDF: %%D:\data\gaming\pc\steam\steamapps\libraryfolders.vdf

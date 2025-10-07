@@ -115,6 +115,11 @@ echo.
 REM Set SDK directory for CMake
 set "BAKKESMOD_SDK_DIR=%SDK_DIR%"
 
+REM Save the project directory
+set "PROJECT_DIR=%CD%"
+echo Project directory: %PROJECT_DIR%
+echo.
+
 REM Create build directory
 echo Creating build directory...
 if exist "build" (
@@ -124,16 +129,34 @@ if exist "build" (
 mkdir build
 cd build
 
+REM Detect Visual Studio version for CMake generator
+set "CMAKE_GENERATOR=Visual Studio 16 2019"
+if exist "C:\Program Files\Microsoft Visual Studio\2022" (
+    set "CMAKE_GENERATOR=Visual Studio 17 2022"
+    echo Using Visual Studio 2022
+) else (
+    echo Using Visual Studio 2019
+)
+
 REM Run CMake
 echo.
 echo Running CMake configuration...
-cmake -G "Visual Studio 16 2019" -A x64 -DBAKKESMOD_SDK_DIR="%BAKKESMOD_SDK_DIR%" ..
+echo Generator: %CMAKE_GENERATOR%
+echo SDK Path: %BAKKESMOD_SDK_DIR%
+echo Source Path: %PROJECT_DIR%
+echo.
+cmake -G "%CMAKE_GENERATOR%" -A x64 -DBAKKESMOD_SDK_DIR="%BAKKESMOD_SDK_DIR%" "%PROJECT_DIR%"
 if %ERRORLEVEL% NEQ 0 (
     echo.
     echo ERROR: CMake configuration failed!
     echo.
-    echo Try running CMake with different generator:
-    echo cmake -G "Visual Studio 17 2022" -A x64 -DBAKKESMOD_SDK_DIR="%BAKKESMOD_SDK_DIR%" ..
+    echo Troubleshooting:
+    echo 1. Make sure you're running from the lights-out project directory
+    echo 2. Check that CMakeLists.txt exists in the project folder
+    echo 3. Verify SDK path: %BAKKESMOD_SDK_DIR%
+    echo.
+    echo Current directory: %CD%
+    echo Project directory: %PROJECT_DIR%
     echo.
     cd ..
     pause

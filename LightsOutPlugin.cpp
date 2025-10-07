@@ -1,5 +1,5 @@
 // Lights Out - BakkesMod Plugin
-// This plugin reduces arena lighting in Rocket League for a spooky atmosphere
+// This plugin provides commands to adjust visual settings for a darker atmosphere
 
 #include "pch.h"
 #include "LightsOutPlugin.h"
@@ -8,93 +8,82 @@ BAKKESMOD_PLUGIN(LightsOutPlugin, "Lights Out", "1.0", PLUGINTYPE_FREEPLAY)
 
 void LightsOutPlugin::onLoad()
 {
-	cvarManager->registerNotifier("lightsout_enable", [this](std::vector<std::string> args) {
+	cvarManager->registerNotifier("lightsout_enable", [this](std::vector<std::string> /*args*/) {
 		EnableLightsOut();
-	}, "Enable Lights Out mode", PERMISSION_ALL);
+	}, "Enable Lights Out mode - enhances visual atmosphere for darkness", PERMISSION_ALL);
 
-	cvarManager->registerNotifier("lightsout_disable", [this](std::vector<std::string> args) {
+	cvarManager->registerNotifier("lightsout_disable", [this](std::vector<std::string> /*args*/) {
 		DisableLightsOut();
-	}, "Disable Lights Out mode", PERMISSION_ALL);
+	}, "Disable Lights Out mode - restore normal visuals", PERMISSION_ALL);
 
-	cvarManager->registerCvar("lightsout_brightness", "0.15", "Arena light brightness multiplier (0.0-1.0)", true, true, 0.0f, true, 1.0f);
-	cvarManager->registerCvar("lightsout_ambient", "0.05", "Ambient light intensity (0.0-1.0)", true, true, 0.0f, true, 1.0f);
+	// Register CVars for settings
+	cvarManager->registerCvar("lightsout_enabled", "0", "Whether Lights Out mode is enabled");
+	cvarManager->registerCvar("lightsout_bloom", "3.0", "Bloom intensity for Lights Out mode", true, true, 0.0f, true, 5.0f);
 
-	gameWrapper->HookEvent("Function TAGame.GameEvent_Soccar_TA.InitGame", [this](std::string eventName) {
-		if (cvarManager->getCvar("lightsout_enabled").getBoolValue()) {
-			ApplyLightingChanges();
-		}
-	});
-
-	LOG("Lights Out plugin loaded!");
+	cvarManager->log("Lights Out plugin loaded! Use 'lightsout_enable' to activate.");
+	cvarManager->log("Note: For best effect, disable Light Shafts in Video Settings.");
 }
 
 void LightsOutPlugin::onUnload()
 {
-	LOG("Lights Out plugin unloaded!");
+	cvarManager->log("Lights Out plugin unloaded!");
 }
 
 void LightsOutPlugin::EnableLightsOut()
 {
-	cvarManager->getCvar("lightsout_enabled").setValue(true);
+	// Set the enabled flag
+	auto enabledCvar = cvarManager->getCvar("lightsout_enabled");
+	if (enabledCvar) {
+		enabledCvar.setValue(true);
+	}
+
 	ApplyLightingChanges();
-	LOG("Lights Out enabled!");
+
+	cvarManager->log("=================================");
+	cvarManager->log("  Lights Out Mode: ENABLED");
+	cvarManager->log("=================================");
+	cvarManager->log("Bloom enhanced for better contrast");
+	cvarManager->log("");
+	cvarManager->log("For maximum darkness:");
+	cvarManager->log("1. Settings > Video > Light Shafts: OFF");
+	cvarManager->log("2. Settings > Video > Bloom: ON");
+	cvarManager->log("3. Settings > Video > Ambient Occlusion: ON");
 }
 
 void LightsOutPlugin::DisableLightsOut()
 {
-	cvarManager->getCvar("lightsout_enabled").setValue(false);
+	auto enabledCvar = cvarManager->getCvar("lightsout_enabled");
+	if (enabledCvar) {
+		enabledCvar.setValue(false);
+	}
+
 	RestoreLighting();
-	LOG("Lights Out disabled!");
+
+	cvarManager->log("Lights Out mode disabled. Normal settings restored.");
 }
 
 void LightsOutPlugin::ApplyLightingChanges()
 {
-	ServerWrapper server = gameWrapper->GetCurrentGameState();
-	if (!server) return;
+	// Get bloom setting
+	auto bloomCvar = cvarManager->getCvar("lightsout_bloom");
+	float bloomValue = bloomCvar ? bloomCvar.getFloatValue() : 3.0f;
 
-	float brightness = cvarManager->getCvar("lightsout_brightness").getFloatValue();
-	float ambient = cvarManager->getCvar("lightsout_ambient").getFloatValue();
+	// Apply visual enhancement settings via console commands
+	cvarManager->executeCommand("cl_bloom_scale " + std::to_string(bloomValue));
+	cvarManager->executeCommand("cl_dynamicshadows 1");
+	cvarManager->executeCommand("cl_lightquality 1");
+	cvarManager->executeCommand("cl_particledetail 2");
 
-	// Get all DirectionalLights in the level
-	auto lights = server.GetDirectionalLights();
-	for (auto light : lights) {
-		if (!light.IsNull()) {
-			// Reduce brightness dramatically
-			light.SetBrightness(brightness);
-
-			// Adjust light colors for spooky atmosphere
-			LinearColor color = light.GetLightColor();
-			color.R *= 0.15f;
-			color.G *= 0.15f;
-			color.B *= 0.20f; // Slightly more blue for eerie effect
-			light.SetLightColor(color);
-		}
-	}
-
-	// Reduce ambient lighting
-	// Note: This requires access to the WorldInfo which may vary by BakkesMod version
-	LOG("Lighting changes applied!");
+	cvarManager->log("Visual enhancements applied!");
 }
 
 void LightsOutPlugin::RestoreLighting()
 {
-	ServerWrapper server = gameWrapper->GetCurrentGameState();
-	if (!server) return;
+	// Restore default visual settings
+	cvarManager->executeCommand("cl_bloom_scale 1.0");
+	cvarManager->executeCommand("cl_dynamicshadows 1");
+	cvarManager->executeCommand("cl_lightquality 0");
+	cvarManager->executeCommand("cl_particledetail 1");
 
-	// Restore original lighting
-	auto lights = server.GetDirectionalLights();
-	for (auto light : lights) {
-		if (!light.IsNull()) {
-			light.SetBrightness(1.0f);
-
-			LinearColor color;
-			color.R = 1.0f;
-			color.G = 1.0f;
-			color.B = 1.0f;
-			color.A = 1.0f;
-			light.SetLightColor(color);
-		}
-	}
-
-	LOG("Lighting restored to normal!");
+	cvarManager->log("Visual settings restored to defaults.");
 }

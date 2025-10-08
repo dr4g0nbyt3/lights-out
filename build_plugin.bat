@@ -190,17 +190,42 @@ set /p INSTALL_CHOICE="> "
 if /i "%INSTALL_CHOICE%"=="Y" (
     echo.
     echo Installing plugin...
-    set "PLUGIN_DIR=%APPDATA%\bakkesmod\bakkesmod\plugins"
 
-    if not exist "%PLUGIN_DIR%" (
-        echo Creating plugin directory...
-        mkdir "%PLUGIN_DIR%"
+    REM Try to find BakkesMod plugins directory
+    set "PLUGIN_DIR="
+
+    if exist "%APPDATA%\bakkesmod\bakkesmod\plugins" (
+        set "PLUGIN_DIR=%APPDATA%\bakkesmod\bakkesmod\plugins"
+    ) else if exist "%LOCALAPPDATA%\bakkesmod\bakkesmod\plugins" (
+        set "PLUGIN_DIR=%LOCALAPPDATA%\bakkesmod\bakkesmod\plugins"
+    ) else (
+        REM Try to create in APPDATA
+        echo BakkesMod plugins directory not found, creating...
+        mkdir "%APPDATA%\bakkesmod\bakkesmod\plugins" 2>nul
+        if exist "%APPDATA%\bakkesmod\bakkesmod\plugins" (
+            set "PLUGIN_DIR=%APPDATA%\bakkesmod\bakkesmod\plugins"
+        )
     )
 
+    if not defined PLUGIN_DIR (
+        echo ERROR: Could not find or create BakkesMod plugins directory
+        echo Please copy the plugin manually from:
+        echo   %CD%\bin\Release\LightsOut.dll
+        echo To one of these locations:
+        echo   %APPDATA%\bakkesmod\bakkesmod\plugins\
+        echo   %LOCALAPPDATA%\bakkesmod\bakkesmod\plugins\
+        cd ..
+        pause
+        exit /b 1
+    )
+
+    echo Installing to: %PLUGIN_DIR%
     copy /Y "bin\Release\LightsOut.dll" "%PLUGIN_DIR%\LightsOut.dll"
     if %ERRORLEVEL% EQU 0 (
         echo.
-        echo Plugin installed successfully!
+        echo ========================================
+        echo   Plugin Installed Successfully!
+        echo ========================================
         echo Location: %PLUGIN_DIR%\LightsOut.dll
         echo.
         echo To use the plugin:
@@ -208,9 +233,12 @@ if /i "%INSTALL_CHOICE%"=="Y" (
         echo 2. Press F6 to open BakkesMod console
         echo 3. Type: plugin load lightsout
         echo 4. Type: lightsout_enable
+        echo.
+        echo The arena lights will turn off!
     ) else (
         echo.
-        echo ERROR: Failed to copy plugin to BakkesMod directory
+        echo ERROR: Failed to copy plugin
+        echo You may need to run as Administrator
     )
 )
 

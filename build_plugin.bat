@@ -263,7 +263,7 @@ if /i "%INSTALL_CHOICE%"=="Y" (
         echo.
 
         REM Apply lighting settings to TASystemSettings.ini
-        set "CONFIG_DIR=%USERPROFILE%\Documents\My Games\Rocket League\TAGame\Config"
+        set "CONFIG_DIR=C:\Users\Mbrune\Documents\My Games\Rocket League\TAGame\Config"
         set "TASYSTEM_FILE=%CONFIG_DIR%\TASystemSettings.ini"
 
         echo Checking for TASystemSettings.ini...

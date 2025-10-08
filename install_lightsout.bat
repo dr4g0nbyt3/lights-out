@@ -187,7 +187,7 @@ if not defined RL_DIR (
 
 :found_rl_dir
 set "BACKUP_DIR=%RL_DIR%\LightsOut_Backup"
-set "CONFIG_DIR=%USERPROFILE%\Documents\My Games\Rocket League\TAGame\Config"
+set "CONFIG_DIR=C:\Users\Mbrune\Documents\My Games\Rocket League\TAGame\Config"
 set "TASYSTEM_FILE=%CONFIG_DIR%\TASystemSettings.ini"
 
 echo Rocket League directory found: %RL_DIR%

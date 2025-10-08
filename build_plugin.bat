@@ -271,8 +271,23 @@ if /i "%INSTALL_CHOICE%"=="Y" (
             echo Found TASystemSettings.ini
             echo Creating backup...
             set "BACKUP_DIR=%CONFIG_DIR%\LightsOut_Backup"
-            if not exist "%BACKUP_DIR%" mkdir "%BACKUP_DIR%"
-            copy /Y "%TASYSTEM_FILE%" "%BACKUP_DIR%\TASystemSettings.ini.backup_%date:~-4,4%%date:~-10,2%%date:~-7,2%_%time:~0,2%%time:~3,2%%time:~6,2%"
+            echo Backup directory path: %BACKUP_DIR%
+            if not exist "%BACKUP_DIR%" (
+                mkdir "%BACKUP_DIR%"
+                if not exist "%BACKUP_DIR%" (
+                    echo WARNING: Failed to create backup directory at %BACKUP_DIR%
+                    echo Backup will not be saved.
+                    set "BACKUP_DIR="
+                ) else (
+                    echo Backup directory created successfully.
+                )
+            ) else (
+                echo Using existing backup directory.
+            )
+
+            if defined BACKUP_DIR (
+                copy /Y "%TASYSTEM_FILE%" "%BACKUP_DIR%\TASystemSettings.ini.backup_%date:~-4,4%%date:~-10,2%%date:~-7,2%_%time:~0,2%%time:~3,2%%time:~6,2%"
+            )
 
             echo Applying lighting changes to TASystemSettings.ini...
 
@@ -301,7 +316,11 @@ if /i "%INSTALL_CHOICE%"=="Y" (
 
             echo.
             echo Lighting settings applied successfully!
-            echo Backup saved to: "%BACKUP_DIR%"
+            if defined BACKUP_DIR (
+                echo Backup saved to: "%BACKUP_DIR%"
+            ) else (
+                echo Backup saved to: (No backup directory created)
+            )
         ) else (
             echo.
             echo WARNING: TASystemSettings.ini not found at %TASYSTEM_FILE%

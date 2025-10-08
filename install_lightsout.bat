@@ -195,28 +195,41 @@ echo.
 
 REM Create backup directory if it doesn't exist
 if not exist "%BACKUP_DIR%" (
-    echo Creating backup directory...
+    echo Creating backup directory: %BACKUP_DIR%
     mkdir "%BACKUP_DIR%"
-)
-
-REM Backup existing files if they exist
-if exist "%RL_DIR%\LightsOut.upk" (
-    echo Backing up existing LightsOut.upk...
-    copy /Y "%RL_DIR%\LightsOut.upk" "%BACKUP_DIR%\LightsOut.upk.backup_%date:~-4,4%%date:~-10,2%%date:~-7,2%_%time:~0,2%%time:~3,2%%time:~6,2%"
-)
-
-if exist "%RL_DIR%\LightsOut_MaterialOverrides.ini" (
-    echo Backing up existing LightsOut_MaterialOverrides.ini...
-    copy /Y "%RL_DIR%\LightsOut_MaterialOverrides.ini" "%BACKUP_DIR%\LightsOut_MaterialOverrides.ini.backup_%date:~-4,4%%date:~-10,2%%date:~-7,2%_%time:~0,2%%time:~3,2%%time:~6,2%"
-)
-
-REM Backup TASystemSettings.ini
-if exist "%TASYSTEM_FILE%" (
-    echo Backing up TASystemSettings.ini...
-    copy /Y "%TASYSTEM_FILE%" "%BACKUP_DIR%\TASystemSettings.ini.backup_%date:~-4,4%%date:~-10,2%%date:~-7,2%_%time:~0,2%%time:~3,2%%time:~6,2%"
+    if not exist "%BACKUP_DIR%" (
+        echo WARNING: Failed to create backup directory at %BACKUP_DIR%
+        echo Backups will not be saved.
+        set "BACKUP_DIR="
+    ) else (
+        echo Backup directory created successfully.
+    )
 ) else (
-    echo WARNING: TASystemSettings.ini not found at %TASYSTEM_FILE%
-    echo The lighting changes may not apply properly.
+    echo Using existing backup directory: %BACKUP_DIR%
+)
+
+REM Backup existing files if they exist (only if backup directory is available)
+if defined BACKUP_DIR (
+    if exist "%RL_DIR%\LightsOut.upk" (
+        echo Backing up existing LightsOut.upk...
+        copy /Y "%RL_DIR%\LightsOut.upk" "%BACKUP_DIR%\LightsOut.upk.backup_%date:~-4,4%%date:~-10,2%%date:~-7,2%_%time:~0,2%%time:~3,2%%time:~6,2%"
+    )
+
+    if exist "%RL_DIR%\LightsOut_MaterialOverrides.ini" (
+        echo Backing up existing LightsOut_MaterialOverrides.ini...
+        copy /Y "%RL_DIR%\LightsOut_MaterialOverrides.ini" "%BACKUP_DIR%\LightsOut_MaterialOverrides.ini.backup_%date:~-4,4%%date:~-10,2%%date:~-7,2%_%time:~0,2%%time:~3,2%%time:~6,2%"
+    )
+
+    REM Backup TASystemSettings.ini
+    if exist "%TASYSTEM_FILE%" (
+        echo Backing up TASystemSettings.ini...
+        copy /Y "%TASYSTEM_FILE%" "%BACKUP_DIR%\TASystemSettings.ini.backup_%date:~-4,4%%date:~-10,2%%date:~-7,2%_%time:~0,2%%time:~3,2%%time:~6,2%"
+    ) else (
+        echo WARNING: TASystemSettings.ini not found at %TASYSTEM_FILE%
+        echo The lighting changes may not apply properly.
+    )
+) else (
+    echo Skipping backups - backup directory not available.
 )
 
 echo.
@@ -292,7 +305,11 @@ echo ========================================
 echo.
 echo Mod files installed to: %RL_DIR%
 echo Lighting settings applied to: %TASYSTEM_FILE%
-echo Backups saved to: %BACKUP_DIR%
+if defined BACKUP_DIR (
+    echo Backups saved to: %BACKUP_DIR%
+) else (
+    echo Backups saved to: (No backup directory created)
+)
 echo.
 echo IMPORTANT: You must restart Rocket League for changes to take effect!
 echo.

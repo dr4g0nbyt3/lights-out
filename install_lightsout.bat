@@ -187,6 +187,8 @@ if not defined RL_DIR (
 
 :found_rl_dir
 set "BACKUP_DIR=%RL_DIR%\LightsOut_Backup"
+set "CONFIG_DIR=%USERPROFILE%\Documents\My Games\Rocket League\TAGame\Config"
+set "TASYSTEM_FILE=%CONFIG_DIR%\TASystemSettings.ini"
 
 echo Rocket League directory found: %RL_DIR%
 echo.
@@ -206,6 +208,15 @@ if exist "%RL_DIR%\LightsOut.upk" (
 if exist "%RL_DIR%\LightsOut_MaterialOverrides.ini" (
     echo Backing up existing LightsOut_MaterialOverrides.ini...
     copy /Y "%RL_DIR%\LightsOut_MaterialOverrides.ini" "%BACKUP_DIR%\LightsOut_MaterialOverrides.ini.backup_%date:~-4,4%%date:~-10,2%%date:~-7,2%_%time:~0,2%%time:~3,2%%time:~6,2%"
+)
+
+REM Backup TASystemSettings.ini
+if exist "%TASYSTEM_FILE%" (
+    echo Backing up TASystemSettings.ini...
+    copy /Y "%TASYSTEM_FILE%" "%BACKUP_DIR%\TASystemSettings.ini.backup_%date:~-4,4%%date:~-10,2%%date:~-7,2%_%time:~0,2%%time:~3,2%%time:~6,2%"
+) else (
+    echo WARNING: TASystemSettings.ini not found at %TASYSTEM_FILE%
+    echo The lighting changes may not apply properly.
 )
 
 echo.
@@ -241,11 +252,46 @@ if exist "%SCRIPT_DIR%LightsOut_MaterialOverrides.ini" (
 )
 
 echo.
+echo Applying lighting changes to TASystemSettings.ini...
+
+REM Apply lighting settings to TASystemSettings.ini
+if exist "%TASYSTEM_FILE%" (
+    REM Check if [SystemSettings] section exists
+    findstr /C:"[SystemSettings]" "%TASYSTEM_FILE%" >nul 2>&1
+    if errorlevel 1 (
+        echo Adding [SystemSettings] section...
+        echo [SystemSettings] >> "%TASYSTEM_FILE%"
+    )
+
+    REM Append lighting reduction settings
+    echo ; Lights Out Mod - Applied lighting reduction settings >> "%TASYSTEM_FILE%"
+    echo DynamicLights=False >> "%TASYSTEM_FILE%"
+    echo DynamicShadows=False >> "%TASYSTEM_FILE%"
+    echo LightEnvironmentShadows=False >> "%TASYSTEM_FILE%"
+    echo CompositeDynamicLights=False >> "%TASYSTEM_FILE%"
+    echo SHSecondaryLighting=False >> "%TASYSTEM_FILE%"
+    echo DirectionalLightmaps=False >> "%TASYSTEM_FILE%"
+    echo Bloom=False >> "%TASYSTEM_FILE%"
+    echo AmbientOcclusion=False >> "%TASYSTEM_FILE%"
+    echo LensFlares=False >> "%TASYSTEM_FILE%"
+    echo FullEffectIntensity=False >> "%TASYSTEM_FILE%"
+    echo MinShadowResolution=16 >> "%TASYSTEM_FILE%"
+    echo MaxShadowResolution=16 >> "%TASYSTEM_FILE%"
+    echo ShadowFilterQualityBias=0 >> "%TASYSTEM_FILE%"
+
+    echo Lighting settings applied successfully!
+) else (
+    echo ERROR: Could not apply lighting settings - TASystemSettings.ini not found
+    echo You may need to launch Rocket League once to generate this file.
+)
+
+echo.
 echo ========================================
 echo   Installation Complete!
 echo ========================================
 echo.
 echo Mod files installed to: %RL_DIR%
+echo Lighting settings applied to: %TASYSTEM_FILE%
 echo Backups saved to: %BACKUP_DIR%
 echo.
 echo IMPORTANT: You must restart Rocket League for changes to take effect!

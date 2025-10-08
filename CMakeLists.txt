@@ -21,14 +21,19 @@ endif()
 # Include BakkesMod SDK headers
 include_directories(${BAKKESMOD_SDK_DIR}/include)
 
+# Link directories for BakkesMod SDK
+link_directories(${BAKKESMOD_SDK_DIR}/lib)
+
 # Create the plugin DLL
 add_library(LightsOut SHARED
     LightsOutPlugin.cpp
     LightsOutPlugin.h
 )
 
-# BakkesMod plugins are header-only - no linking needed
-# The plugin interfaces with BakkesMod through the plugin manager at runtime
+# Link against the BakkesMod Plugin SDK library
+target_link_libraries(LightsOut PRIVATE
+    pluginsdk
+)
 
 # Set compile options
 if(MSVC)

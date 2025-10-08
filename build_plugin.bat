@@ -180,7 +180,28 @@ echo ========================================
 echo   Build Successful!
 echo ========================================
 echo.
-echo Plugin location: %CD%\bin\Release\LightsOut.dll
+
+REM Find the actual DLL location
+set "DLL_PATH="
+if exist "bin\Release\LightsOut.dll" (
+    set "DLL_PATH=bin\Release\LightsOut.dll"
+    echo Plugin location: %CD%\bin\Release\LightsOut.dll
+) else if exist "bin\LightsOut.dll" (
+    set "DLL_PATH=bin\LightsOut.dll"
+    echo Plugin location: %CD%\bin\LightsOut.dll
+) else if exist "Release\LightsOut.dll" (
+    set "DLL_PATH=Release\LightsOut.dll"
+    echo Plugin location: %CD%\Release\LightsOut.dll
+) else (
+    echo ERROR: Could not find LightsOut.dll in expected locations
+    echo Searched:
+    echo   - %CD%\bin\Release\LightsOut.dll
+    echo   - %CD%\bin\LightsOut.dll
+    echo   - %CD%\Release\LightsOut.dll
+    cd ..
+    pause
+    exit /b 1
+)
 echo.
 
 REM Ask if user wants to install the plugin
@@ -220,7 +241,7 @@ if /i "%INSTALL_CHOICE%"=="Y" (
     )
 
     echo Installing to: %PLUGIN_DIR%
-    copy /Y "bin\Release\LightsOut.dll" "%PLUGIN_DIR%\LightsOut.dll"
+    copy /Y "%DLL_PATH%" "%PLUGIN_DIR%\LightsOut.dll"
     if %ERRORLEVEL% EQU 0 (
         echo.
         echo ========================================

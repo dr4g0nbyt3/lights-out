@@ -211,27 +211,37 @@ set /p INSTALL_CHOICE="> "
 if /i "%INSTALL_CHOICE%"=="Y" (
     echo.
     echo Installing plugin...
+    echo.
+    echo DEBUG: DLL_PATH = %DLL_PATH%
+    echo DEBUG: APPDATA = %APPDATA%
+    echo.
 
     REM Try to find BakkesMod plugins directory
     set "PLUGIN_DIR="
 
     if exist "%APPDATA%\bakkesmod\bakkesmod\plugins" (
         set "PLUGIN_DIR=%APPDATA%\bakkesmod\bakkesmod\plugins"
+        echo DEBUG: Found plugins directory in APPDATA
     ) else if exist "%LOCALAPPDATA%\bakkesmod\bakkesmod\plugins" (
         set "PLUGIN_DIR=%LOCALAPPDATA%\bakkesmod\bakkesmod\plugins"
+        echo DEBUG: Found plugins directory in LOCALAPPDATA
     ) else (
         REM Try to create in APPDATA
         echo BakkesMod plugins directory not found, creating...
         mkdir "%APPDATA%\bakkesmod\bakkesmod\plugins" 2>nul
         if exist "%APPDATA%\bakkesmod\bakkesmod\plugins" (
             set "PLUGIN_DIR=%APPDATA%\bakkesmod\bakkesmod\plugins"
+            echo DEBUG: Created plugins directory in APPDATA
         )
     )
+
+    echo DEBUG: PLUGIN_DIR = %PLUGIN_DIR%
+    echo.
 
     if not defined PLUGIN_DIR (
         echo ERROR: Could not find or create BakkesMod plugins directory
         echo Please copy the plugin manually from:
-        echo   %CD%\bin\Release\LightsOut.dll
+        echo   %CD%\%DLL_PATH%
         echo To one of these locations:
         echo   %APPDATA%\bakkesmod\bakkesmod\plugins\
         echo   %LOCALAPPDATA%\bakkesmod\bakkesmod\plugins\
@@ -240,14 +250,16 @@ if /i "%INSTALL_CHOICE%"=="Y" (
         exit /b 1
     )
 
-    echo Installing to: %PLUGIN_DIR%
+    echo Installing from: %CD%\%DLL_PATH%
+    echo Installing to: "%PLUGIN_DIR%\LightsOut.dll"
+    echo.
     copy /Y "%DLL_PATH%" "%PLUGIN_DIR%\LightsOut.dll"
     if %ERRORLEVEL% EQU 0 (
         echo.
         echo ========================================
         echo   Plugin Installed Successfully!
         echo ========================================
-        echo Location: %PLUGIN_DIR%\LightsOut.dll
+        echo Location: "%PLUGIN_DIR%\LightsOut.dll"
         echo.
         echo To use the plugin:
         echo 1. Launch Rocket League

@@ -261,6 +261,55 @@ if /i "%INSTALL_CHOICE%"=="Y" (
         echo ========================================
         echo Location: "%PLUGIN_DIR%\LightsOut.dll"
         echo.
+
+        REM Apply lighting settings to TASystemSettings.ini
+        set "CONFIG_DIR=%USERPROFILE%\Documents\My Games\Rocket League\TAGame\Config"
+        set "TASYSTEM_FILE=%CONFIG_DIR%\TASystemSettings.ini"
+
+        echo Checking for TASystemSettings.ini...
+        if exist "%TASYSTEM_FILE%" (
+            echo Found TASystemSettings.ini
+            echo Creating backup...
+            set "BACKUP_DIR=%CONFIG_DIR%\LightsOut_Backup"
+            if not exist "%BACKUP_DIR%" mkdir "%BACKUP_DIR%"
+            copy /Y "%TASYSTEM_FILE%" "%BACKUP_DIR%\TASystemSettings.ini.backup_%date:~-4,4%%date:~-10,2%%date:~-7,2%_%time:~0,2%%time:~3,2%%time:~6,2%"
+
+            echo Applying lighting changes to TASystemSettings.ini...
+
+            REM Check if [SystemSettings] section exists
+            findstr /C:"[SystemSettings]" "%TASYSTEM_FILE%" >nul 2>&1
+            if errorlevel 1 (
+                echo Adding [SystemSettings] section...
+                echo [SystemSettings] >> "%TASYSTEM_FILE%"
+            )
+
+            REM Append lighting reduction settings
+            echo ; Lights Out Mod - Applied lighting reduction settings >> "%TASYSTEM_FILE%"
+            echo DynamicLights=False >> "%TASYSTEM_FILE%"
+            echo DynamicShadows=False >> "%TASYSTEM_FILE%"
+            echo LightEnvironmentShadows=False >> "%TASYSTEM_FILE%"
+            echo CompositeDynamicLights=False >> "%TASYSTEM_FILE%"
+            echo SHSecondaryLighting=False >> "%TASYSTEM_FILE%"
+            echo DirectionalLightmaps=False >> "%TASYSTEM_FILE%"
+            echo Bloom=False >> "%TASYSTEM_FILE%"
+            echo AmbientOcclusion=False >> "%TASYSTEM_FILE%"
+            echo LensFlares=False >> "%TASYSTEM_FILE%"
+            echo FullEffectIntensity=False >> "%TASYSTEM_FILE%"
+            echo MinShadowResolution=16 >> "%TASYSTEM_FILE%"
+            echo MaxShadowResolution=16 >> "%TASYSTEM_FILE%"
+            echo ShadowFilterQualityBias=0 >> "%TASYSTEM_FILE%"
+
+            echo.
+            echo Lighting settings applied successfully!
+            echo Backup saved to: "%BACKUP_DIR%"
+        ) else (
+            echo.
+            echo WARNING: TASystemSettings.ini not found at %TASYSTEM_FILE%
+            echo Please launch Rocket League at least once to generate this file.
+            echo You can apply lighting settings later by running install_lightsout.bat
+        )
+
+        echo.
         echo To use the plugin:
         echo 1. Launch Rocket League
         echo 2. Press F6 to open BakkesMod console

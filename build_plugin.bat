@@ -329,13 +329,33 @@ if /i "%INSTALL_CHOICE%"=="Y" (
         )
 
         echo.
-        echo To use the plugin:
-        echo 1. Launch Rocket League
-        echo 2. Press F6 to open BakkesMod console
-        echo 3. Type: plugin load lightsout
-        echo 4. Type: lightsout_enable
+        echo ========================================
+        echo   How to Use Lights Out Plugin
+        echo ========================================
         echo.
-        echo The arena lights will turn off!
+        echo CRITICAL: Plugin ONLY works in FREEPLAY mode!
+        echo.
+        echo Step-by-Step Activation:
+        echo.
+        echo 1. Launch Rocket League ^(BakkesMod auto-starts^)
+        echo 2. Navigate to: Play ^> Training ^> Free Play
+        echo 3. Wait for freeplay to fully load
+        echo 4. Press F6 to open BakkesMod console
+        echo 5. Type: plugin load lightsout
+        echo 6. Type: lightsout_enable
+        echo 7. Press F6 to close console
+        echo.
+        echo For Maximum Effect:
+        echo - Settings ^> Video ^> Light Shafts: OFF ^(critical!^)
+        echo - Settings ^> Video ^> Bloom: ON
+        echo - Settings ^> Video ^> Ambient Occlusion: ON
+        echo.
+        echo Commands:
+        echo   lightsout_enable     - Enable dark mode
+        echo   lightsout_disable    - Restore normal lighting
+        echo   lightsout_bloom X    - Adjust bloom ^(default: 3.0^)
+        echo.
+        echo See LIGHTS_OUT_DETAILED_INSTRUCTIONS.md for full guide
     ) else (
         echo.
         echo ERROR: Failed to copy plugin

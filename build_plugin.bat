@@ -333,16 +333,25 @@ if /i "%INSTALL_CHOICE%"=="Y" (
         echo   Lights Out v2.0 - Usage Instructions
         echo ========================================
         echo.
-        echo STEP 1: Launch Rocket League
+        echo CRITICAL: Plugin ONLY works in FREEPLAY mode!
         echo.
-        echo STEP 2: Press F6 to open BakkesMod console
+        echo STEP 1: Launch Rocket League ^(BakkesMod auto-starts^)
         echo.
-        echo STEP 3: Load the plugin
-        echo   plugin load lightsout
+        echo STEP 2: Navigate to: Play ^> Training ^> Free Play
         echo.
-        echo STEP 4: Load the configuration file
+        echo STEP 3: Wait for freeplay to fully load
+        echo.
+        echo STEP 4: Press F6 to open BakkesMod console
+        echo.
+        echo STEP 5: Load the plugin
+        echo   Type: plugin load lightsout
+        echo.
+        echo STEP 6: Load the configuration file
         echo   First, copy lightsout.cfg to: %%APPDATA%%\bakkesmod\bakkesmod\cfg\
         echo   Then in BakkesMod console: exec lightsout.cfg
+        echo.
+        echo STEP 7: Enable Lights Out
+        echo   Type: lightsout_enable
         echo.
         echo ========================================
         echo   Available Commands
@@ -391,6 +400,7 @@ if /i "%INSTALL_CHOICE%"=="Y" (
         echo   - Bloom: ON (needed for headlights)
         echo   - Ambient Occlusion: ON (deeper shadows)
         echo.
+        echo See LIGHTS_OUT_DETAILED_INSTRUCTIONS.md for full guide
         echo ========================================
     ) else (
         echo.

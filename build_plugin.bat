@@ -330,32 +330,78 @@ if /i "%INSTALL_CHOICE%"=="Y" (
 
         echo.
         echo ========================================
-        echo   How to Use Lights Out Plugin
+        echo   Lights Out v2.0 - Usage Instructions
         echo ========================================
         echo.
         echo CRITICAL: Plugin ONLY works in FREEPLAY mode!
         echo.
-        echo Step-by-Step Activation:
+        echo STEP 1: Launch Rocket League ^(BakkesMod auto-starts^)
         echo.
-        echo 1. Launch Rocket League ^(BakkesMod auto-starts^)
-        echo 2. Navigate to: Play ^> Training ^> Free Play
-        echo 3. Wait for freeplay to fully load
-        echo 4. Press F6 to open BakkesMod console
-        echo 5. Type: plugin load lightsout
-        echo 6. Type: lightsout_enable
-        echo 7. Press F6 to close console
+        echo STEP 2: Navigate to: Play ^> Training ^> Free Play
         echo.
-        echo For Maximum Effect:
-        echo - Settings ^> Video ^> Light Shafts: OFF ^(critical!^)
-        echo - Settings ^> Video ^> Bloom: ON
-        echo - Settings ^> Video ^> Ambient Occlusion: ON
+        echo STEP 3: Wait for freeplay to fully load
         echo.
-        echo Commands:
-        echo   lightsout_enable     - Enable dark mode
-        echo   lightsout_disable    - Restore normal lighting
-        echo   lightsout_bloom X    - Adjust bloom ^(default: 3.0^)
+        echo STEP 4: Press F6 to open BakkesMod console
+        echo.
+        echo STEP 5: Load the plugin
+        echo   Type: plugin load lightsout
+        echo.
+        echo STEP 6: Load the configuration file
+        echo   First, copy lightsout.cfg to: %%APPDATA%%\bakkesmod\bakkesmod\cfg\
+        echo   Then in BakkesMod console: exec lightsout.cfg
+        echo.
+        echo STEP 7: Enable Lights Out
+        echo   Type: lightsout_enable
+        echo.
+        echo ========================================
+        echo   Available Commands
+        echo ========================================
+        echo.
+        echo QUICK START:
+        echo   lightsout_enable              - Enable Lights Out mode
+        echo   lightsout_disable             - Disable and restore defaults
+        echo.
+        echo PRESETS (30%% to 95%% darker):
+        echo   lightsout_preset subtle       - 30%% darker (bright maps)
+        echo   lightsout_preset medium       - 60%% darker (balanced)
+        echo   lightsout_preset dark         - 85%% darker (default)
+        echo   lightsout_preset pitchblack   - 95%% darker (EXTREME)
+        echo.
+        echo QUICK ALIASES (from lightsout.cfg):
+        echo   lo_enable / lo_disable        - Toggle mod
+        echo   lo_subtle / lo_medium          - Apply presets
+        echo   lo_dark / lo_pitchblack       - Apply dark presets
+        echo   lo_status                     - Show current settings
+        echo.
+        echo GRANULAR CONTROLS (adjust individual parameters):
+        echo   lightsout_directional_main    - Main light brightness (0.0-1.0)
+        echo   lightsout_ambient_intensity   - Ambient light (0.0-1.0)
+        echo   lightsout_bloom               - Bloom intensity (0.0-10.0)
+        echo   lightsout_shadow_darkness     - Shadow depth (0.0-1.0)
+        echo   lightsout_skybox_brightness   - Sky contribution (0.0-1.0)
+        echo   lightsout_apply               - Apply current settings
+        echo.
+        echo UTILITY:
+        echo   lightsout_status              - Display all current values
+        echo   lightsout_reset               - Reset to default values
+        echo.
+        echo EXAMPLES:
+        echo   lightsout_enable
+        echo   lightsout_preset pitchblack
+        echo   lightsout_bloom 6.0
+        echo   lightsout_status
+        echo.
+        echo ========================================
+        echo   Video Settings (IMPORTANT!)
+        echo ========================================
+        echo.
+        echo For maximum darkness, set in Rocket League:
+        echo   - Light Shafts: OFF (critical!)
+        echo   - Bloom: ON (needed for headlights)
+        echo   - Ambient Occlusion: ON (deeper shadows)
         echo.
         echo See LIGHTS_OUT_DETAILED_INSTRUCTIONS.md for full guide
+        echo ========================================
     ) else (
         echo.
         echo ERROR: Failed to copy plugin

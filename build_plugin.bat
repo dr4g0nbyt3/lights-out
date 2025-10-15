@@ -251,10 +251,10 @@ if /i "!INSTALL_CHOICE!"=="Y" (
         exit /b 1
     )
 
-    echo Installing from: %CD%\%DLL_PATH%
-    echo Installing to: "%PLUGIN_DIR%\LightsOut.dll"
+    echo Installing from: %CD%\!DLL_PATH!
+    echo Installing to: "!PLUGIN_DIR!\LightsOut.dll"
     echo.
-    copy /Y "%DLL_PATH%" "%PLUGIN_DIR%\LightsOut.dll"
+    copy /Y "!DLL_PATH!" "!PLUGIN_DIR!\LightsOut.dll"
     if %ERRORLEVEL% EQU 0 (
         echo.
         echo ========================================
@@ -287,7 +287,10 @@ if /i "!INSTALL_CHOICE!"=="Y" (
             )
 
             if defined BACKUP_DIR (
-                set "timestamp=%date:~-4,4%%date:~-10,2%%date:~-7,2%_%time:~0,2%%time:~3,2%%time:~6,2%"
+                REM Get timestamp components
+                for /f "tokens=2-4 delims=/ " %%a in ('date /t') do (set mydate=%%c%%a%%b)
+                for /f "tokens=1-2 delims=/:" %%a in ('time /t') do (set mytime=%%a%%b)
+                set "timestamp=!mydate!_!mytime!"
                 set "timestamp=!timestamp: =0!"
                 copy /Y "%TASYSTEM_FILE%" "%BACKUP_DIR%\TASystemSettings.ini.backup_!timestamp!"
             )
@@ -296,7 +299,7 @@ if /i "!INSTALL_CHOICE!"=="Y" (
 
             REM Check if [SystemSettings] section exists
             findstr /C:"[SystemSettings]" "%TASYSTEM_FILE%" >nul 2>&1
-            if errorlevel 1 (
+            if %ERRORLEVEL% NEQ 0 (
                 echo Adding [SystemSettings] section...
                 echo [SystemSettings] >> "%TASYSTEM_FILE%"
             )

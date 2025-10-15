@@ -410,6 +410,17 @@ if /i "!INSTALL_CHOICE!"=="Y" (
         echo ERROR: Failed to copy plugin
         echo You may need to run as Administrator
     )
+) else if /i "!INSTALL_CHOICE!"=="N" (
+    echo.
+    echo Installation skipped.
+    echo You can manually copy the plugin from:
+    echo   %CD%\%DLL_PATH%
+    echo To:
+    echo   %%APPDATA%%\bakkesmod\bakkesmod\plugins\
+) else (
+    echo.
+    echo Invalid input. Please enter Y or N.
+    echo Installation skipped.
 )
 
 echo.

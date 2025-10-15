@@ -1,4 +1,5 @@
 @echo off
+setlocal enabledelayedexpansion
 REM Lights Out Plugin - Build Script
 REM This script compiles the BakkesMod plugin
 
@@ -286,7 +287,9 @@ if /i "%INSTALL_CHOICE%"=="Y" (
             )
 
             if defined BACKUP_DIR (
-                copy /Y "%TASYSTEM_FILE%" "%BACKUP_DIR%\TASystemSettings.ini.backup_%date:~-4,4%%date:~-10,2%%date:~-7,2%_%time:~0,2%%time:~3,2%%time:~6,2%"
+                set "timestamp=%date:~-4,4%%date:~-10,2%%date:~-7,2%_%time:~0,2%%time:~3,2%%time:~6,2%"
+                set "timestamp=!timestamp: =0!"
+                copy /Y "%TASYSTEM_FILE%" "%BACKUP_DIR%\TASystemSettings.ini.backup_!timestamp!"
             )
 
             echo Applying lighting changes to TASystemSettings.ini...

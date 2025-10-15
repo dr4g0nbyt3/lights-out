@@ -209,7 +209,7 @@ REM Ask if user wants to install the plugin
 echo Do you want to install the plugin to BakkesMod? (Y/N)
 set /p INSTALL_CHOICE="> "
 
-if /i "%INSTALL_CHOICE%"=="Y" (
+if /i "!INSTALL_CHOICE!"=="Y" (
     echo.
     echo Installing plugin...
     echo.

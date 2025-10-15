@@ -8,12 +8,12 @@
 
 // BakkesMod SDK
 #include "bakkesmod/plugin/bakkesmodplugin.h"
-#include "bakkesmod/plugin/pluginwindow.h"
 
 // Standard library
 #include <string>
 #include <vector>
 #include <memory>
 #include <functional>
+#include <algorithm>
 
 #endif //PCH_H

@@ -4,6 +4,7 @@
 
 #include "pch.h"
 #include "LightsOutPlugin.h"
+#include <algorithm>
 
 BAKKESMOD_PLUGIN(LightsOutPlugin, "Lights Out", "2.0", PLUGINTYPE_FREEPLAY)
 
@@ -475,30 +476,42 @@ void LightsOutPlugin::PrintCurrentSettings()
 	cvarManager->log("=================================================================");
 
 	cvarManager->log("Directional Lighting:");
-	cvarManager->log("  Main: " + std::to_string(cvarManager->getCvar("lightsout_directional_main").getFloatValue()));
-	cvarManager->log("  Secondary: " + std::to_string(cvarManager->getCvar("lightsout_directional_secondary").getFloatValue()));
+	auto dirMain = cvarManager->getCvar("lightsout_directional_main");
+	auto dirSecondary = cvarManager->getCvar("lightsout_directional_secondary");
+	if (dirMain) cvarManager->log("  Main: " + std::to_string(dirMain.getFloatValue()));
+	if (dirSecondary) cvarManager->log("  Secondary: " + std::to_string(dirSecondary.getFloatValue()));
 
 	cvarManager->log("");
 	cvarManager->log("Ambient Lighting:");
-	cvarManager->log("  Intensity: " + std::to_string(cvarManager->getCvar("lightsout_ambient_intensity").getFloatValue()));
-	cvarManager->log("  Skybox: " + std::to_string(cvarManager->getCvar("lightsout_skybox_brightness").getFloatValue()));
-	cvarManager->log("  Indirect: " + std::to_string(cvarManager->getCvar("lightsout_indirect_multiplier").getFloatValue()));
+	auto ambientInt = cvarManager->getCvar("lightsout_ambient_intensity");
+	auto skybox = cvarManager->getCvar("lightsout_skybox_brightness");
+	auto indirect = cvarManager->getCvar("lightsout_indirect_multiplier");
+	if (ambientInt) cvarManager->log("  Intensity: " + std::to_string(ambientInt.getFloatValue()));
+	if (skybox) cvarManager->log("  Skybox: " + std::to_string(skybox.getFloatValue()));
+	if (indirect) cvarManager->log("  Indirect: " + std::to_string(indirect.getFloatValue()));
 
 	cvarManager->log("");
 	cvarManager->log("Post Processing:");
-	cvarManager->log("  Bloom: " + std::to_string(cvarManager->getCvar("lightsout_bloom").getFloatValue()));
-	cvarManager->log("  Shadow Contrast: " + std::to_string(cvarManager->getCvar("lightsout_shadow_contrast").getFloatValue()));
-	cvarManager->log("  Shadow Darkness: " + std::to_string(cvarManager->getCvar("lightsout_shadow_darkness").getFloatValue()));
+	auto bloom = cvarManager->getCvar("lightsout_bloom");
+	auto shadowContrast = cvarManager->getCvar("lightsout_shadow_contrast");
+	auto shadowDarkness = cvarManager->getCvar("lightsout_shadow_darkness");
+	if (bloom) cvarManager->log("  Bloom: " + std::to_string(bloom.getFloatValue()));
+	if (shadowContrast) cvarManager->log("  Shadow Contrast: " + std::to_string(shadowContrast.getFloatValue()));
+	if (shadowDarkness) cvarManager->log("  Shadow Darkness: " + std::to_string(shadowDarkness.getFloatValue()));
 
 	cvarManager->log("");
 	cvarManager->log("Environmental:");
-	cvarManager->log("  Crowd: " + std::to_string(cvarManager->getCvar("lightsout_crowd_intensity").getFloatValue()));
-	cvarManager->log("  Ceiling: " + std::to_string(cvarManager->getCvar("lightsout_ceiling_intensity").getFloatValue()));
+	auto crowd = cvarManager->getCvar("lightsout_crowd_intensity");
+	auto ceiling = cvarManager->getCvar("lightsout_ceiling_intensity");
+	if (crowd) cvarManager->log("  Crowd: " + std::to_string(crowd.getFloatValue()));
+	if (ceiling) cvarManager->log("  Ceiling: " + std::to_string(ceiling.getFloatValue()));
 
 	cvarManager->log("");
 	cvarManager->log("Materials:");
-	cvarManager->log("  Floodlights: " + std::to_string(cvarManager->getCvar("lightsout_floodlight_emissive").getFloatValue()));
-	cvarManager->log("  Surface: " + std::to_string(cvarManager->getCvar("lightsout_surface_ambient").getFloatValue()));
+	auto floodlight = cvarManager->getCvar("lightsout_floodlight_emissive");
+	auto surface = cvarManager->getCvar("lightsout_surface_ambient");
+	if (floodlight) cvarManager->log("  Floodlights: " + std::to_string(floodlight.getFloatValue()));
+	if (surface) cvarManager->log("  Surface: " + std::to_string(surface.getFloatValue()));
 
 	cvarManager->log("=================================================================");
 }

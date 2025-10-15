@@ -28,7 +28,11 @@ link_directories(${BAKKESMOD_SDK_DIR}/lib)
 add_library(LightsOut SHARED
     LightsOutPlugin.cpp
     LightsOutPlugin.h
+    pch.h
 )
+
+# Enable precompiled headers
+target_precompile_headers(LightsOut PRIVATE pch.h)
 
 # Link against the BakkesMod Plugin SDK library
 target_link_libraries(LightsOut PRIVATE

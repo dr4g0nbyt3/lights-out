@@ -1,4 +1,5 @@
 @echo off
+setlocal enabledelayedexpansion
 REM Lights Out Mod - Installation Script
 REM This script installs the Lights Out Halloween mod files to Rocket League
 
@@ -210,20 +211,23 @@ if not exist "%BACKUP_DIR%" (
 
 REM Backup existing files if they exist (only if backup directory is available)
 if defined BACKUP_DIR (
+    set "timestamp=%date:~-4,4%%date:~-10,2%%date:~-7,2%_%time:~0,2%%time:~3,2%%time:~6,2%"
+    set "timestamp=!timestamp: =0!"
+
     if exist "%RL_DIR%\LightsOut.upk" (
         echo Backing up existing LightsOut.upk...
-        copy /Y "%RL_DIR%\LightsOut.upk" "%BACKUP_DIR%\LightsOut.upk.backup_%date:~-4,4%%date:~-10,2%%date:~-7,2%_%time:~0,2%%time:~3,2%%time:~6,2%"
+        copy /Y "%RL_DIR%\LightsOut.upk" "%BACKUP_DIR%\LightsOut.upk.backup_!timestamp!"
     )
 
     if exist "%RL_DIR%\LightsOut_MaterialOverrides.ini" (
         echo Backing up existing LightsOut_MaterialOverrides.ini...
-        copy /Y "%RL_DIR%\LightsOut_MaterialOverrides.ini" "%BACKUP_DIR%\LightsOut_MaterialOverrides.ini.backup_%date:~-4,4%%date:~-10,2%%date:~-7,2%_%time:~0,2%%time:~3,2%%time:~6,2%"
+        copy /Y "%RL_DIR%\LightsOut_MaterialOverrides.ini" "%BACKUP_DIR%\LightsOut_MaterialOverrides.ini.backup_!timestamp!"
     )
 
     REM Backup TASystemSettings.ini
     if exist "%TASYSTEM_FILE%" (
         echo Backing up TASystemSettings.ini...
-        copy /Y "%TASYSTEM_FILE%" "%BACKUP_DIR%\TASystemSettings.ini.backup_%date:~-4,4%%date:~-10,2%%date:~-7,2%_%time:~0,2%%time:~3,2%%time:~6,2%"
+        copy /Y "%TASYSTEM_FILE%" "%BACKUP_DIR%\TASystemSettings.ini.backup_!timestamp!"
     ) else (
         echo WARNING: TASystemSettings.ini not found at %TASYSTEM_FILE%
         echo The lighting changes may not apply properly.

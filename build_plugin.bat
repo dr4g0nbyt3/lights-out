@@ -329,13 +329,69 @@ if /i "%INSTALL_CHOICE%"=="Y" (
         )
 
         echo.
-        echo To use the plugin:
-        echo 1. Launch Rocket League
-        echo 2. Press F6 to open BakkesMod console
-        echo 3. Type: plugin load lightsout
-        echo 4. Type: lightsout_enable
+        echo ========================================
+        echo   Lights Out v2.0 - Usage Instructions
+        echo ========================================
         echo.
-        echo The arena lights will turn off!
+        echo STEP 1: Launch Rocket League
+        echo.
+        echo STEP 2: Press F6 to open BakkesMod console
+        echo.
+        echo STEP 3: Load the plugin
+        echo   plugin load lightsout
+        echo.
+        echo STEP 4: Load the configuration file
+        echo   First, copy lightsout.cfg to: %%APPDATA%%\bakkesmod\bakkesmod\cfg\
+        echo   Then in BakkesMod console: exec lightsout.cfg
+        echo.
+        echo ========================================
+        echo   Available Commands
+        echo ========================================
+        echo.
+        echo QUICK START:
+        echo   lightsout_enable              - Enable Lights Out mode
+        echo   lightsout_disable             - Disable and restore defaults
+        echo.
+        echo PRESETS (30%% to 95%% darker):
+        echo   lightsout_preset subtle       - 30%% darker (bright maps)
+        echo   lightsout_preset medium       - 60%% darker (balanced)
+        echo   lightsout_preset dark         - 85%% darker (default)
+        echo   lightsout_preset pitchblack   - 95%% darker (EXTREME)
+        echo.
+        echo QUICK ALIASES (from lightsout.cfg):
+        echo   lo_enable / lo_disable        - Toggle mod
+        echo   lo_subtle / lo_medium          - Apply presets
+        echo   lo_dark / lo_pitchblack       - Apply dark presets
+        echo   lo_status                     - Show current settings
+        echo.
+        echo GRANULAR CONTROLS (adjust individual parameters):
+        echo   lightsout_directional_main    - Main light brightness (0.0-1.0)
+        echo   lightsout_ambient_intensity   - Ambient light (0.0-1.0)
+        echo   lightsout_bloom               - Bloom intensity (0.0-10.0)
+        echo   lightsout_shadow_darkness     - Shadow depth (0.0-1.0)
+        echo   lightsout_skybox_brightness   - Sky contribution (0.0-1.0)
+        echo   lightsout_apply               - Apply current settings
+        echo.
+        echo UTILITY:
+        echo   lightsout_status              - Display all current values
+        echo   lightsout_reset               - Reset to default values
+        echo.
+        echo EXAMPLES:
+        echo   lightsout_enable
+        echo   lightsout_preset pitchblack
+        echo   lightsout_bloom 6.0
+        echo   lightsout_status
+        echo.
+        echo ========================================
+        echo   Video Settings (IMPORTANT!)
+        echo ========================================
+        echo.
+        echo For maximum darkness, set in Rocket League:
+        echo   - Light Shafts: OFF (critical!)
+        echo   - Bloom: ON (needed for headlights)
+        echo   - Ambient Occlusion: ON (deeper shadows)
+        echo.
+        echo ========================================
     ) else (
         echo.
         echo ERROR: Failed to copy plugin

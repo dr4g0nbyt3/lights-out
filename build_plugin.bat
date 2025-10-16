@@ -206,14 +206,15 @@ if exist "bin\Release\LightsOut.dll" (
 echo.
 
 REM Ask if user wants to install the plugin
+set "INSTALL_CHOICE="
 set /p INSTALL_CHOICE="Do you want to install the plugin to BakkesMod? (Y/N): "
 
-if /i "%INSTALL_CHOICE%"=="Y" (
+if /i "!INSTALL_CHOICE!"=="Y" (
     echo.
     echo Installing plugin...
     echo.
-    echo DEBUG: DLL_PATH = %DLL_PATH%
-    echo DEBUG: APPDATA = %APPDATA%
+    echo DEBUG: DLL_PATH = !DLL_PATH!
+    echo DEBUG: APPDATA = !APPDATA!
     echo.
 
     REM Try to find BakkesMod plugins directory
@@ -235,47 +236,47 @@ if /i "%INSTALL_CHOICE%"=="Y" (
         )
     )
 
-    echo DEBUG: PLUGIN_DIR = %PLUGIN_DIR%
+    echo DEBUG: PLUGIN_DIR = !PLUGIN_DIR!
     echo.
 
     if not defined PLUGIN_DIR (
         echo ERROR: Could not find or create BakkesMod plugins directory
         echo Please copy the plugin manually from:
-        echo   %CD%\%DLL_PATH%
+        echo   !CD!\!DLL_PATH!
         echo To one of these locations:
-        echo   %APPDATA%\bakkesmod\bakkesmod\plugins\
-        echo   %LOCALAPPDATA%\bakkesmod\bakkesmod\plugins\
+        echo   !APPDATA!\bakkesmod\bakkesmod\plugins\
+        echo   !LOCALAPPDATA!\bakkesmod\bakkesmod\plugins\
         cd ..
         pause
         exit /b 1
     )
 
-    echo Installing from: %CD%\!DLL_PATH!
+    echo Installing from: !CD!\!DLL_PATH!
     echo Installing to: "!PLUGIN_DIR!\LightsOut.dll"
     echo.
     copy /Y "!DLL_PATH!" "!PLUGIN_DIR!\LightsOut.dll"
-    if %ERRORLEVEL% EQU 0 (
+    if !ERRORLEVEL! EQU 0 (
         echo.
         echo ========================================
         echo   Plugin Installed Successfully!
         echo ========================================
-        echo Location: "%PLUGIN_DIR%\LightsOut.dll"
+        echo Location: "!PLUGIN_DIR!\LightsOut.dll"
         echo.
 
         REM Apply lighting settings to TASystemSettings.ini
         set "CONFIG_DIR=%USERPROFILE%\Documents\My Games\Rocket League\TAGame\Config"
-        set "TASYSTEM_FILE=%CONFIG_DIR%\TASystemSettings.ini"
+        set "TASYSTEM_FILE=!CONFIG_DIR!\TASystemSettings.ini"
 
         echo Checking for TASystemSettings.ini...
-        if exist "%TASYSTEM_FILE%" (
+        if exist "!TASYSTEM_FILE!" (
             echo Found TASystemSettings.ini
             echo Creating backup...
-            set "BACKUP_DIR=%CONFIG_DIR%\LightsOut_Backup"
-            echo Backup directory path: %BACKUP_DIR%
-            if not exist "%BACKUP_DIR%" (
-                mkdir "%BACKUP_DIR%"
-                if not exist "%BACKUP_DIR%" (
-                    echo WARNING: Failed to create backup directory at %BACKUP_DIR%
+            set "BACKUP_DIR=!CONFIG_DIR!\LightsOut_Backup"
+            echo Backup directory path: !BACKUP_DIR!
+            if not exist "!BACKUP_DIR!" (
+                mkdir "!BACKUP_DIR!"
+                if not exist "!BACKUP_DIR!" (
+                    echo WARNING: Failed to create backup directory at !BACKUP_DIR!
                     echo Backup will not be saved.
                     set "BACKUP_DIR="
                 ) else (
@@ -291,44 +292,44 @@ if /i "%INSTALL_CHOICE%"=="Y" (
                 for /f "tokens=1-2 delims=/:" %%a in ('time /t') do (set mytime=%%a%%b)
                 set "timestamp=!mydate!_!mytime!"
                 set "timestamp=!timestamp: =0!"
-                copy /Y "%TASYSTEM_FILE%" "%BACKUP_DIR%\TASystemSettings.ini.backup_!timestamp!"
+                copy /Y "!TASYSTEM_FILE!" "!BACKUP_DIR!\TASystemSettings.ini.backup_!timestamp!"
             )
 
             echo Applying lighting changes to TASystemSettings.ini...
 
             REM Check if [SystemSettings] section exists
-            findstr /C:"[SystemSettings]" "%TASYSTEM_FILE%" >nul 2>&1
-            if %ERRORLEVEL% NEQ 0 (
+            findstr /C:"[SystemSettings]" "!TASYSTEM_FILE!" >nul 2>&1
+            if !ERRORLEVEL! NEQ 0 (
                 echo Adding [SystemSettings] section...
-                echo [SystemSettings] >> "%TASYSTEM_FILE%"
+                echo [SystemSettings] >> "!TASYSTEM_FILE!"
             )
 
             REM Append lighting reduction settings
-            echo ; Lights Out Mod - Applied lighting reduction settings >> "%TASYSTEM_FILE%"
-            echo DynamicLights=False >> "%TASYSTEM_FILE%"
-            echo DynamicShadows=False >> "%TASYSTEM_FILE%"
-            echo LightEnvironmentShadows=False >> "%TASYSTEM_FILE%"
-            echo CompositeDynamicLights=False >> "%TASYSTEM_FILE%"
-            echo SHSecondaryLighting=False >> "%TASYSTEM_FILE%"
-            echo DirectionalLightmaps=False >> "%TASYSTEM_FILE%"
-            echo Bloom=False >> "%TASYSTEM_FILE%"
-            echo AmbientOcclusion=False >> "%TASYSTEM_FILE%"
-            echo LensFlares=False >> "%TASYSTEM_FILE%"
-            echo FullEffectIntensity=False >> "%TASYSTEM_FILE%"
-            echo MinShadowResolution=16 >> "%TASYSTEM_FILE%"
-            echo MaxShadowResolution=16 >> "%TASYSTEM_FILE%"
-            echo ShadowFilterQualityBias=0 >> "%TASYSTEM_FILE%"
+            echo ; Lights Out Mod - Applied lighting reduction settings >> "!TASYSTEM_FILE!"
+            echo DynamicLights=False >> "!TASYSTEM_FILE!"
+            echo DynamicShadows=False >> "!TASYSTEM_FILE!"
+            echo LightEnvironmentShadows=False >> "!TASYSTEM_FILE!"
+            echo CompositeDynamicLights=False >> "!TASYSTEM_FILE!"
+            echo SHSecondaryLighting=False >> "!TASYSTEM_FILE!"
+            echo DirectionalLightmaps=False >> "!TASYSTEM_FILE!"
+            echo Bloom=False >> "!TASYSTEM_FILE!"
+            echo AmbientOcclusion=False >> "!TASYSTEM_FILE!"
+            echo LensFlares=False >> "!TASYSTEM_FILE!"
+            echo FullEffectIntensity=False >> "!TASYSTEM_FILE!"
+            echo MinShadowResolution=16 >> "!TASYSTEM_FILE!"
+            echo MaxShadowResolution=16 >> "!TASYSTEM_FILE!"
+            echo ShadowFilterQualityBias=0 >> "!TASYSTEM_FILE!"
 
             echo.
             echo Lighting settings applied successfully!
             if defined BACKUP_DIR (
-                echo Backup saved to: "%BACKUP_DIR%"
+                echo Backup saved to: "!BACKUP_DIR!"
             ) else (
                 echo Backup saved to: (No backup directory created)
             )
         ) else (
             echo.
-            echo WARNING: TASystemSettings.ini not found at %TASYSTEM_FILE%
+            echo WARNING: TASystemSettings.ini not found at !TASYSTEM_FILE!
             echo Please launch Rocket League at least once to generate this file.
             echo You can apply lighting settings later by running install_lightsout.bat
         )
@@ -412,11 +413,11 @@ if /i "%INSTALL_CHOICE%"=="Y" (
         echo ERROR: Failed to copy plugin
         echo You may need to run as Administrator
     )
-) else if /i "%INSTALL_CHOICE%"=="N" (
+) else if /i "!INSTALL_CHOICE!"=="N" (
     echo.
     echo Installation skipped.
     echo You can manually copy the plugin from:
-    echo   %CD%\%DLL_PATH%
+    echo   !CD!\!DLL_PATH!
     echo To:
     echo   %%APPDATA%%\bakkesmod\bakkesmod\plugins\
 ) else (

@@ -336,7 +336,8 @@ void LightsOutPlugin::ApplyPreset(const std::string& presetName)
 {
 	std::string preset = presetName;
 	// Convert to lowercase for case-insensitive comparison
-	std::transform(preset.begin(), preset.end(), preset.begin(), ::tolower);
+	std::transform(preset.begin(), preset.end(), preset.begin(),
+		[](unsigned char c) { return static_cast<char>(std::tolower(c)); });
 
 	if (preset == "subtle") {
 		LoadPreset_Subtle();

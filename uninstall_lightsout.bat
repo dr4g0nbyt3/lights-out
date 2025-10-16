@@ -1,4 +1,5 @@
 @echo off
+setlocal enabledelayedexpansion
 REM Lights Out Mod - Uninstallation Script
 REM This script removes the Lights Out Halloween mod files from Rocket League
 

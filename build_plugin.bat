@@ -207,9 +207,9 @@ echo.
 
 REM Ask if user wants to install the plugin
 set "INSTALL_CHOICE="
-set /p INSTALL_CHOICE="Do you want to install the plugin to BakkesMod? (Y/N): "
+set /p "INSTALL_CHOICE=Do you want to install the plugin to BakkesMod? (Y/N): "
 
-if /i "!INSTALL_CHOICE!"=="Y" (
+if /i "%INSTALL_CHOICE%"=="Y" (
     echo.
     echo Installing plugin...
     echo.
@@ -413,7 +413,7 @@ if /i "!INSTALL_CHOICE!"=="Y" (
         echo ERROR: Failed to copy plugin
         echo You may need to run as Administrator
     )
-) else if /i "!INSTALL_CHOICE!"=="N" (
+) else if /i "%INSTALL_CHOICE%"=="N" (
     echo.
     echo Installation skipped.
     echo You can manually copy the plugin from:
